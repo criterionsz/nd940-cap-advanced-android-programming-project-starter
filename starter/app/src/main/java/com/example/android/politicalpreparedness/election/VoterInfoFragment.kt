@@ -9,7 +9,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.example.android.politicalpreparedness.R
 import com.example.android.politicalpreparedness.ServiceLocator
-import com.example.android.politicalpreparedness.database.ElectionDatabase
 import com.example.android.politicalpreparedness.databinding.FragmentVoterInfoBinding
 
 class VoterInfoFragment : Fragment() {
@@ -17,7 +16,10 @@ class VoterInfoFragment : Fragment() {
 
     // Add ViewModel values and create ViewModel
     private val viewModel by viewModels<VoterInfoViewModel> {
-        VoterInfoViewModelFactory(ServiceLocator.provideElectionRepository(requireContext()))
+        VoterInfoViewModelFactory(
+            ServiceLocator.provideElectionRepository(requireContext()),
+            VoterInfoFragmentArgs.fromBundle(requireArguments()).argElectionId
+        )
     }
 
     override fun onCreateView(
@@ -37,10 +39,8 @@ class VoterInfoFragment : Fragment() {
         /**
         Hint: You will need to ensure proper data is provided from previous fragment.
          */
-        val electionId = VoterInfoFragmentArgs.fromBundle(requireArguments()).argElectionId
-        val division = VoterInfoFragmentArgs.fromBundle(requireArguments()).argDivision
-        viewModel.initState(electionId)
-        viewModel.getRemote(electionId.toLong(), division)
+        viewModel.initState()
+        viewModel.getRemote()
 
 
         //TODO: Handle save button UI state
@@ -50,8 +50,6 @@ class VoterInfoFragment : Fragment() {
 
 
         //TODO: Add binding values
-
-
 
 
         //TODO: Handle loading of URLs

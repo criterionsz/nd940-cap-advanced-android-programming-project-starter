@@ -22,7 +22,6 @@ class ElectionDefaultRepository(
     // Observed Flow will notify the observer when the data has changed.
     val elections: Flow<List<Election>> = electionDao.getAllElections()
 
-
     override suspend fun refreshUpcomingElections() = withContext(ioDispatcher) {
         try {
             val response = remoteSource.getElections()
@@ -65,8 +64,8 @@ class ElectionDefaultRepository(
        return electionDao.get(id)
     }
 
-
     override suspend fun saveElection(election: Election) = withContext(ioDispatcher) {
+
         electionDao.insert(election)
     }
 
