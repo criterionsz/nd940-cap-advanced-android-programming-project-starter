@@ -1,4 +1,4 @@
-package com.example.android.politicalpreparedness.representative
+ package com.example.android.politicalpreparedness.representative
 
 import android.content.Context
 import android.location.Geocoder
@@ -6,7 +6,10 @@ import android.location.Location
 import android.os.Bundle
 import android.view.*
 import android.view.inputmethod.InputMethodManager
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import com.example.android.politicalpreparedness.R
+import com.example.android.politicalpreparedness.databinding.FragmentRepresentativeBinding
 import com.example.android.politicalpreparedness.network.models.Address
 import java.util.Locale
 
@@ -16,12 +19,20 @@ class DetailFragment : Fragment() {
         //TODO: Add Constant for Location request
     }
 
+    private lateinit var binding: FragmentRepresentativeBinding
+
     //TODO: Declare ViewModel
 
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-
+        binding = DataBindingUtil.inflate(
+            inflater,
+            R.layout.fragment_representative,
+            container,
+            false
+        )
+        return binding.root
         //TODO: Establish bindings
 
         //TODO: Define and assign Representative adapter
@@ -48,6 +59,7 @@ class DetailFragment : Fragment() {
 
     private fun isPermissionGranted() : Boolean {
         //TODO: Check if permission is already granted and return (true = granted, false = denied/other)
+        return true
     }
 
     private fun getLocation() {

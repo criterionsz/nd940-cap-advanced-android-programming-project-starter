@@ -1,28 +1,62 @@
 package com.example.android.politicalpreparedness.election
 
 import android.os.Bundle
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import com.example.android.politicalpreparedness.R
+import com.example.android.politicalpreparedness.ServiceLocator
+import com.example.android.politicalpreparedness.database.ElectionDatabase
+import com.example.android.politicalpreparedness.databinding.FragmentVoterInfoBinding
 
 class VoterInfoFragment : Fragment() {
+    private lateinit var binding: FragmentVoterInfoBinding
 
-    override fun onCreateView(inflater: LayoutInflater,
-                              container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    // Add ViewModel values and create ViewModel
+    private val viewModel by viewModels<VoterInfoViewModel> {
+        VoterInfoViewModelFactory(ServiceLocator.provideElectionRepository(requireContext()))
+    }
 
-        //TODO: Add ViewModel values and create ViewModel
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        binding = DataBindingUtil.inflate(
+            inflater,
+            R.layout.fragment_voter_info,
+            container,
+            false
+        )
+        binding.lifecycleOwner = viewLifecycleOwner
+        binding.vm = viewModel
+        //Populate voter info -- hide views without provided data.
+        /**
+        Hint: You will need to ensure proper data is provided from previous fragment.
+         */
+        val electionId = VoterInfoFragmentArgs.fromBundle(requireArguments()).argElectionId
+        val division = VoterInfoFragmentArgs.fromBundle(requireArguments()).argDivision
+        viewModel.initState(electionId)
+        viewModel.getRemote(electionId.toLong(), division)
+
+
+        //TODO: Handle save button UI state
+
+
+        return binding.root
+
 
         //TODO: Add binding values
 
-        //TODO: Populate voter info -- hide views without provided data.
-        /**
-        Hint: You will need to ensure proper data is provided from previous fragment.
-        */
+
 
 
         //TODO: Handle loading of URLs
 
-        //TODO: Handle save button UI state
+
         //TODO: cont'd Handle save button clicks
 
     }

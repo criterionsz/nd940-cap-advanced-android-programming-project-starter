@@ -15,7 +15,7 @@ buildscript {
         version_recyclerview = "1.2.0-alpha05"
         version_glide = "4.11.0"
         version_play_services_location = "17.0.0"
-        version_room = "2.2.5"
+        version_room = "2.3.0"
     }
 
     repositories {
@@ -23,7 +23,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath "com.android.tools.build:gradle:$version_android_gradle_plugin"
+        classpath 'com.android.tools.build:gradle:4.2.2'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$version_kotlin"
         classpath "org.jetbrains.kotlin:kotlin-serialization:$version_kotlin"
         classpath "androidx.navigation:navigation-safe-args-gradle-plugin:$version_navigation"

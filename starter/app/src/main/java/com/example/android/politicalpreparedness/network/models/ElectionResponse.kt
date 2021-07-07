@@ -7,3 +7,7 @@ data class ElectionResponse(
         val kind: String,
         val elections: List<Election>
 )
+
+fun ElectionResponse.asDatabaseModel(): List<Election> {
+        return elections
+}

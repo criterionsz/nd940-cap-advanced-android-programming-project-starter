@@ -2,16 +2,35 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.android.politicalpreparedness">
 
+
+<!--    Before the Android system can start an app component, -->
+<!--    the system must know that the component exists by reading the app's manifest file-->
+<!--    The manifest does a number of things in addition to declaring the app's components,
+such as the following:-->
+<!--    Identifies any user permissions the app requires, such as Internet access or read-access
+ to the user's contacts.-->
+<!--    Declares the minimum API Level required by the app, based on which APIs the app uses.-->
+<!--    Declares hardware and software features used or required by the app, such as a camera,
+bluetooth services, or a multitouch screen.-->
+<!--    Declares API libraries the app needs to be linked against
+ (other than the Android framework APIs), such as the Google Maps library.-->
+
     <!-- >TODO: Add Permissions -->
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
+        android:name=".ElectionApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+<!--        all elements for activites-->
         <activity android:name="com.example.android.politicalpreparedness.MainActivity">
+<!-- intent filters that declare the capabilities of the activity so it can respond to intents
+from other apps. this tag element as a child of the component's declaration element.-->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
