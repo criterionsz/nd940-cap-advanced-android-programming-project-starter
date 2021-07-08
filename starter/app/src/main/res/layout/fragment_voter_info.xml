@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <!-- TODO: Add data binding node for Voter Info ViewModel -->
+    <!-- Add data binding node for Voter Info ViewModel -->
     <data>
 
         <variable
@@ -33,6 +33,7 @@
             android:id="@+id/election_date"
             style="@style/SubtitleStyle"
             android:layout_width="match_parent"
+            android:text="@{vm.voterInfo.election.electionDay.toString()}"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/default_padding"
             app:layout_constraintTop_toBottomOf="@id/election_name"
@@ -42,31 +43,33 @@
         <TextView
             android:id="@+id/state_header"
             style="@style/TitleStyle"
+            android:layout_marginTop="30dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/election_information"
             app:layout_constraintStart_toStartOf="@id/election_date"
             app:layout_constraintTop_toBottomOf="@id/election_date" />
 
-        <!-- TODO: Add click binding to open web URL -->
+        <!--  Add click binding to open web URL -->
         <!--  Add visual styling and content -->
         <TextView
             android:id="@+id/state_locations"
             style="@style/SubtitleStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:onClick="@{() ->vm.openInfo(vm.voterInfo.state.get(0).electionAdministrationBody.votingLocationFinderUrl)}"
             android:text="@string/voting_locations"
-            android:textSize="14sp"
             app:layout_constraintStart_toStartOf="@id/election_date"
             app:layout_constraintTop_toBottomOf="@id/state_header" />
 
-        <!-- TODO: Add click binding to open web URL -->
+        <!-- Add click binding to open web URL -->
         <!-- Add visual styling and content -->
         <TextView
             android:id="@+id/state_ballot"
             style="@style/SubtitleStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:onClick="@{() ->vm.openInfo(vm.voterInfo.state.get(0).electionAdministrationBody.ballotInfoUrl)}"
             android:text="@string/ballot_information"
             app:layout_constraintStart_toStartOf="@id/election_date"
             app:layout_constraintTop_toBottomOf="@id/state_locations" />
@@ -77,20 +80,23 @@
             android:layout_height="wrap_content"
             app:constraint_referenced_ids="state_correspondence_header,address" />
 
-        <!-- TODO: Add visual styling and content -->
+        <!--  Add visual styling and content -->
         <TextView
             android:id="@+id/state_correspondence_header"
+            style="@style/TitleStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:text="@string/correspondence_address"
             app:layout_constraintStart_toStartOf="@id/election_date"
-            app:layout_constraintTop_toBottomOf="@id/state_ballot"
-            tools:text="state_correspondence_header" />
+            app:layout_constraintTop_toBottomOf="@id/state_ballot" />
 
-        <!-- TODO: Add data binding -->
+        <!-- Add data binding -->
         <TextView
             android:id="@+id/address"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="@{vm.voterInfo.state.get(0).electionAdministrationBody.correspondenceAddress.toFormattedString()}"
             app:layout_constraintStart_toStartOf="@id/election_date"
             app:layout_constraintTop_toBottomOf="@id/state_correspondence_header"
             tools:text="address" />

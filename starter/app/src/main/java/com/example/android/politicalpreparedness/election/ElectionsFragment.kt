@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import com.example.android.politicalpreparedness.ElectionApplication
@@ -67,6 +68,11 @@ class ElectionsFragment : Fragment() {
         }
 
         //TODO: Populate recycler adapters
+        viewModel.getUpcomingElections()
+        viewModel.getSavedElections().asLiveData().observe(viewLifecycleOwner) {
+            viewModel.savedElections(it)
+        }
+
         return binding.root
 
     }

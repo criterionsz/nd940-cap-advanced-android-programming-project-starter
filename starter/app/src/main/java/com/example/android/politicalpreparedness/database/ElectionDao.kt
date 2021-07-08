@@ -23,7 +23,7 @@ interface ElectionDao {
 
     //select single election query
     @Query("SELECT * FROM election_table WHERE id = :key")
-    fun get(key: Int): LiveData<Election?>
+    fun get(key: Int): LiveData<Election>
 
     //delete query
     @Query("DELETE FROM election_table WHERE id = :key")

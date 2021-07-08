@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.android.politicalpreparedness.network.models.Election
 import com.example.android.politicalpreparedness.repository.ElectionRepository
 import com.example.android.politicalpreparedness.repository.Result
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 
 /*
@@ -37,6 +38,11 @@ class ElectionsViewModel(
     val savedElection: LiveData<List<Election>>
         get() = _savedElections
 
+    fun getSavedElections(): Flow<List<Election>> = electionRepository.getAllElections()
+    fun savedElections(list: List<Election>) {
+        _savedElections.postValue(list)
+    }
+
     private val _navigate = MutableLiveData<Election?>()
     val navigate: LiveData<Election?>
         get() = _navigate
@@ -53,6 +59,7 @@ class ElectionsViewModel(
         }
         _dataLoading.value = false
     }
+
 
     //TODO: Create functions to navigate to saved or upcoming election voter info
     fun navigateTo(election: Election) {

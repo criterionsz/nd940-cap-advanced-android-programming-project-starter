@@ -19,8 +19,8 @@ interface ElectionRepository {
 
     suspend fun refreshRepresentativeInfoByAddress(address: String): Result<RepresentativeResponse>
 
-    fun getElection(id: Int): LiveData<Election?>
-
+    fun getElection(id: Int): LiveData<Election>
+    fun getAllElections(): Flow<List<Election>>
     suspend fun saveElection(election: Election)
 
     suspend fun deleteAllElections()

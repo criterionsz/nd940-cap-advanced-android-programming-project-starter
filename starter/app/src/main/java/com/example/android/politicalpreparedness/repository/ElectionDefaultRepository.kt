@@ -20,8 +20,9 @@ class ElectionDefaultRepository(
 
     // Room executes all queries on a separate thread.
     // Observed Flow will notify the observer when the data has changed.
-    val elections: Flow<List<Election>> = electionDao.getAllElections()
-
+    override fun getAllElections(): Flow<List<Election>> {
+        return electionDao.getAllElections()
+    }
     override suspend fun refreshUpcomingElections() = withContext(ioDispatcher) {
         try {
             val response = remoteSource.getElections()
@@ -60,7 +61,7 @@ class ElectionDefaultRepository(
             }
         }
 
-    override fun getElection(id: Int): LiveData<Election?> {
+    override fun getElection(id: Int): LiveData<Election> {
        return electionDao.get(id)
     }
 

@@ -8,6 +8,7 @@ import com.example.android.politicalpreparedness.election.State
 import com.example.android.politicalpreparedness.election.VoterInfoViewModel
 import com.example.android.politicalpreparedness.election.adapter.ElectionListAdapter
 import com.example.android.politicalpreparedness.network.models.Election
+import com.example.android.politicalpreparedness.network.models.VoterInfoResponse
 
 @BindingAdapter("listData")
 fun bindRecyclerView(recyclerView: RecyclerView, data: List<Election>?) {
@@ -23,7 +24,6 @@ fun bindButton(button: Button, state: State) {
         button.text = button.context.getString(R.string.follow_eleciton)
     }
 }
-
 
 /**
  * Use this binding adapter to show and hide the views using boolean variables
