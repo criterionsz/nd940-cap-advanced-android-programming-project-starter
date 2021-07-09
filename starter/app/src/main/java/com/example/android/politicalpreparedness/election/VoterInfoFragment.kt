@@ -31,6 +31,9 @@ class VoterInfoFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+
+        // Add binding values
+
         binding = DataBindingUtil.inflate(
             inflater,
             R.layout.fragment_voter_info,
@@ -45,27 +48,21 @@ class VoterInfoFragment : Fragment() {
          */
         viewModel.initState()
         viewModel.getRemote()
-        viewModel.openInfo.observe(viewLifecycleOwner){
+        viewModel.openInfo.observe(viewLifecycleOwner) {
             startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(it)))
         }
 
-
-        //TODO: Handle save button UI state
-
-
+        // cont'd Handle save button clicks
+        // Handle save button UI state
+        // Create method to load URL intents
+        //Handle loading of URLs
+        viewModel.initState().observe(viewLifecycleOwner) {
+            if (it == null) {
+                viewModel.setState(State.NOT_SAVED)
+            } else {
+                viewModel.setState(State.SAVED)
+            }
+        }
         return binding.root
-
-
-        //TODO: Add binding values
-
-
-        //TODO: Handle loading of URLs
-
-
-        //TODO: cont'd Handle save button clicks
-
     }
-
-    //TODO: Create method to load URL intents
-
 }

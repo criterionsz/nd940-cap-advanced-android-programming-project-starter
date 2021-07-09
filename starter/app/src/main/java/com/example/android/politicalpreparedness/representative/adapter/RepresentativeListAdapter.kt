@@ -151,9 +151,3 @@ class RepresentativeDiffCallback : DiffUtil.ItemCallback<Representative>() {
     }
 
 }
-
-//todo: Create RepresentativeListener
-class RepresentativeListener(val clickListener: (Representative) -> Unit) {
-  //  fun onClick(representative: Representative) = cli
-
-}

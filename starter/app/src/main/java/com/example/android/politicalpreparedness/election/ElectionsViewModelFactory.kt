@@ -9,7 +9,7 @@ import com.example.android.politicalpreparedness.repository.ElectionRepository
 The factory method pattern is a creational design pattern that uses factory methods to create objects.
 A factory method is a method that returns an instance of the same class.
  */
-//TODO: Create Factory to generate ElectionViewModel with provided election datasource
+// Create Factory to generate ElectionViewModel with provided election datasource
 @Suppress("UNCHECKED_CAST")
 class ElectionsViewModelFactory(
     private val electionRepository: ElectionRepository

@@ -1,4 +1,4 @@
- package com.example.android.politicalpreparedness.representative
+package com.example.android.politicalpreparedness.representative
 
 import android.Manifest
 import android.annotation.SuppressLint
@@ -10,17 +10,23 @@ import android.location.Location
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import com.example.android.politicalpreparedness.ElectionApplication
 import com.example.android.politicalpreparedness.R
 import com.example.android.politicalpreparedness.databinding.FragmentRepresentativeBinding
 import com.example.android.politicalpreparedness.network.models.Address
+import com.example.android.politicalpreparedness.representative.adapter.RepresentativeListAdapter
 import com.google.android.gms.location.LocationServices
 import com.google.android.material.snackbar.Snackbar
-import java.util.Locale
+import java.util.*
 
 class DetailFragment : Fragment() {
 
@@ -32,29 +38,61 @@ class DetailFragment : Fragment() {
 
     private lateinit var binding: FragmentRepresentativeBinding
 
-    //TODO: Declare ViewModel
+    //Declare ViewModel
+    private val viewModel by viewModels<RepresentativeViewModel> {
+        RepresentativeViewModelFactory((requireContext().applicationContext as ElectionApplication).electionRepository)
+    }
 
-    override fun onCreateView(inflater: LayoutInflater,
-                              container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+
+        //Establish bindings
         binding = DataBindingUtil.inflate(
             inflater,
             R.layout.fragment_representative,
             container,
             false
         )
+        binding.lifecycleOwner = viewLifecycleOwner
+        binding.vm = viewModel
 
+        //Define and assign Representative adapter
+        val adapter = RepresentativeListAdapter()
+        binding.representativesList.adapter = adapter
+
+        // Populate Representative adapter
+
+        //Establish button listeners for field and location search
         binding.buttonLocation.setOnClickListener {
             getLocation()
         }
+        binding.buttonSearch.setOnClickListener {
+            hideKeyboard()
+            if (binding.addressLine1.text.trim().isNullOrEmpty() ||
+                binding.city.text.trim().isNullOrEmpty() ||
+                binding.zip.text.trim().isNullOrEmpty() ||
+                binding.state.selectedItem.toString().trim().isNullOrEmpty()
+            ) {
+                Toast.makeText(requireContext(), "Fill all required gaps", Toast.LENGTH_SHORT)
+                    .show()
+            } else {
+                viewModel.getAddressFromGeoLocation(
+                    Address(
+                        line1 = binding.addressLine1.text.toString(),
+                        line2 = binding.addressLine2.text.toString(),
+                        city = binding.city.text.toString(),
+                        state = binding.state.selectedItem.toString(),
+                        zip = binding.zip.text.toString()
+                    )
+                )
+            }
+
+        }
+
         return binding.root
-        //TODO: Establish bindings
-
-        //TODO: Define and assign Representative adapter
-
-        //TODO: Populate Representative adapter
-
-        //TODO: Establish button listeners for field and location search
 
     }
 
@@ -62,7 +100,11 @@ class DetailFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == REQUEST_LOCATION_PERMISSION) {
             if (grantResults.size > 0 && (grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
@@ -100,9 +142,9 @@ class DetailFragment : Fragment() {
     }
 
     @Suppress("DEPRECATED_IDENTITY_EQUALS")
-    private fun isPermissionGranted() : Boolean {
+    private fun isPermissionGranted(): Boolean {
         // Check if permission is already granted and return (true = granted, false = denied/other)
-       return ContextCompat.checkSelfPermission(
+        return ContextCompat.checkSelfPermission(
             requireContext(),
             Manifest.permission.ACCESS_FINE_LOCATION
         ) === PackageManager.PERMISSION_GRANTED
@@ -114,7 +156,12 @@ class DetailFragment : Fragment() {
         //The geoCodeLocation method is a helper function to change the lat/long location to a human readable street address
         if (checkLocationPermissions()) {
             LocationServices.getFusedLocationProviderClient(requireContext()).lastLocation.addOnSuccessListener {
-                val res = geoCodeLocation(it)
+                if (it == null) {
+                    Toast.makeText(requireContext(), "Something went wrong. Can't get location, please fill gaps", Toast.LENGTH_SHORT)
+                        .show()
+                } else {
+                    viewModel.getAddressFromGeoLocation(geoCodeLocation(it))
+                }
             }
         } else {
             requestPermissions(
@@ -128,10 +175,16 @@ class DetailFragment : Fragment() {
     private fun geoCodeLocation(location: Location): Address {
         val geocoder = Geocoder(context, Locale.getDefault())
         return geocoder.getFromLocation(location.latitude, location.longitude, 1)
-                .map { address ->
-                    Address(address.thoroughfare, address.subThoroughfare, address.locality, address.adminArea, address.postalCode)
-                }
-                .first()
+            .map { address ->
+                Address(
+                    address.thoroughfare,
+                    address.subThoroughfare,
+                    address.locality,
+                    address.adminArea,
+                    address.postalCode
+                )
+            }
+            .first()
     }
 
     private fun hideKeyboard() {

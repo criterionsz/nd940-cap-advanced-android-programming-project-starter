@@ -5,14 +5,20 @@ import android.widget.Button
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.android.politicalpreparedness.election.State
-import com.example.android.politicalpreparedness.election.VoterInfoViewModel
 import com.example.android.politicalpreparedness.election.adapter.ElectionListAdapter
 import com.example.android.politicalpreparedness.network.models.Election
-import com.example.android.politicalpreparedness.network.models.VoterInfoResponse
+import com.example.android.politicalpreparedness.representative.adapter.RepresentativeListAdapter
+import com.example.android.politicalpreparedness.representative.model.Representative
 
 @BindingAdapter("listData")
 fun bindRecyclerView(recyclerView: RecyclerView, data: List<Election>?) {
     val adapter = recyclerView.adapter as ElectionListAdapter
+    adapter.submitList(data)
+}
+
+@BindingAdapter("listData")
+fun bindRecyclerViewRepresentative(recyclerView: RecyclerView, data: List<Representative>?) {
+    val adapter = recyclerView.adapter as RepresentativeListAdapter
     adapter.submitList(data)
 }
 

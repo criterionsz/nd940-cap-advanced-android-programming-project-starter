@@ -67,7 +67,7 @@ class ElectionsFragment : Fragment() {
             }
         }
 
-        //TODO: Populate recycler adapters
+        //Populate recycler adapters
         viewModel.getUpcomingElections()
         viewModel.getSavedElections().asLiveData().observe(viewLifecycleOwner) {
             viewModel.savedElections(it)

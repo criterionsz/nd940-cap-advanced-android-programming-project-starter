@@ -15,7 +15,7 @@ bluetooth services, or a multitouch screen.-->
 <!--    Declares API libraries the app needs to be linked against
  (other than the Android framework APIs), such as the Google Maps library.-->
 
-    <!-- >TODO: Add Permissions -->
+    <!-- > Add Permissions -->
 
     <uses-permission android:name="android.permission.INTERNET" />
 

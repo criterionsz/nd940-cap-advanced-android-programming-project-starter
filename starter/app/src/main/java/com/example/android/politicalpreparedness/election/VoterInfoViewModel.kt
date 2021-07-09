@@ -1,10 +1,12 @@
 package com.example.android.politicalpreparedness.election
 
 import android.util.Log
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.android.politicalpreparedness.network.models.Division
 import com.example.android.politicalpreparedness.network.models.VoterInfoResponse
-import com.example.android.politicalpreparedness.repository.ElectionDefaultRepository
 import com.example.android.politicalpreparedness.repository.ElectionRepository
 import com.example.android.politicalpreparedness.repository.Result
 import kotlinx.coroutines.Dispatchers
@@ -17,41 +19,40 @@ class VoterInfoViewModel(
     private val division: Division
 ) : ViewModel() {
 
-    //TODO: Add live data to hold voter info
+
     private val _electionName = MutableLiveData<String>()
     val electionName: LiveData<String>
         get() = _electionName
 
 
-    private val _state = MutableLiveData<State>()
-    val state: LiveData<State>
+    private val _state = MutableLiveData<State?>()
+    val state: LiveData<State?>
         get() = _state
 
+    //cont'd -- Populate initial state of save button to reflect proper action based on election saved status
+    init {
+        _state.value = State.NOT_SAVED
+    }
+
+    //Add live data to hold voter info
     private val _voterInfo = MutableLiveData<VoterInfoResponse>()
     val voterInfo: LiveData<VoterInfoResponse> = _voterInfo
 
     private val _openInfo = MutableLiveData<String>()
     val openInfo: LiveData<String> = _openInfo
 
-    //TODO: Add var and methods to populate voter info
+    fun initState() = dataSource.getElection(id)
 
-    //TODO: Add var and methods to support loading URLs
-
-    //TODO: Add var and methods to save and remove elections to local database
-    //TODO: cont'd -- Populate initial state of save button to reflect proper action based on election saved status
-    fun initState() = viewModelScope.launch {
-        val res = dataSource.getElection(id).value
-        if (res == null) {
-            _state.value = State.NOT_SAVED
-        } else {
-            _state.value = State.SAVED
-        }
+    fun setState(state: State) {
+        _state.postValue(state)
     }
 
+    // Add var and methods to support loading URLs
     fun openInfo(uri: String) {
         _openInfo.value = uri
     }
 
+    // Add var and methods to save and remove elections to local database
     fun click() = viewModelScope.launch {
         withContext(Dispatchers.IO) {
             if (state.value == State.SAVED) {
@@ -66,7 +67,7 @@ class VoterInfoViewModel(
         }
     }
 
-
+    // Add var and methods to populate voter info
     fun getRemote() = viewModelScope.launch {
         val address = "${division.country} ${division.state}".trim()
         when (val res = dataSource.refreshVoterInfoQuery(address, id.toLong())) {

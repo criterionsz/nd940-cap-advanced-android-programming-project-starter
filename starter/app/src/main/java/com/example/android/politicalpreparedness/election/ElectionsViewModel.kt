@@ -15,7 +15,7 @@ import kotlinx.coroutines.launch
 Hold all of the data needed for the UI and prepare it for display
 ViewModel - abstract class that holds your app's UI data. Survives configuration changes
 * */
-//TODO: Construct ViewModel and provide election datasource
+//Construct ViewModel and provide election datasource
 class ElectionsViewModel(
     private val electionRepository: ElectionRepository
 ) : ViewModel() {
@@ -33,7 +33,7 @@ class ElectionsViewModel(
     private val _dataLoading = MutableLiveData<Boolean>()
     val dataLoading: LiveData<Boolean> = _dataLoading
 
-    //TODO: Create live data val for saved elections
+    //Create live data val for saved elections
     private val _savedElections = MutableLiveData<List<Election>>()
     val savedElection: LiveData<List<Election>>
         get() = _savedElections
@@ -47,7 +47,7 @@ class ElectionsViewModel(
     val navigate: LiveData<Election?>
         get() = _navigate
 
-    //TODO: Create val and functions to populate live data for upcoming elections from the API and saved elections from local database
+    // Create val and functions to populate live data for upcoming elections from the API and saved elections from local database
     fun getUpcomingElections() = viewModelScope.launch {
         _dataLoading.value = true
         when (val response = electionRepository.refreshUpcomingElections()) {
@@ -61,7 +61,7 @@ class ElectionsViewModel(
     }
 
 
-    //TODO: Create functions to navigate to saved or upcoming election voter info
+    // Create functions to navigate to saved or upcoming election voter info
     fun navigateTo(election: Election) {
         _navigate.value = election
     }
